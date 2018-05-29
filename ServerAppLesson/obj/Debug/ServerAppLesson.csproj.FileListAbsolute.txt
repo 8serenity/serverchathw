@@ -1,0 +1,10 @@
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.exe.config
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.exe
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.pdb
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csprojResolveAssemblyReference.cache
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csproj.CoreCompileInputs.cache
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.exe
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.pdb
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.dll
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.xml
+c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csproj.CopyComplete
