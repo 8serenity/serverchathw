@@ -15,5 +15,7 @@ namespace ServerAppLesson
         public string Text { get; set; }
         [JsonProperty("date")]
         public DateTime SentDate { get; set; }
+        [JsonProperty("file")]
+        public byte?[] File { get; set; }
     }
 }

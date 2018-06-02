@@ -8,3 +8,13 @@ c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\D
 c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.dll
 c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.xml
 c:\users\мухамедьян\source\repos\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csproj.CopyComplete
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.exe.config
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.exe
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\bin\Debug\ServerAppLesson.pdb
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.dll
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\bin\Debug\Newtonsoft.Json.xml
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csprojResolveAssemblyReference.cache
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csproj.CoreCompileInputs.cache
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.csproj.CopyComplete
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.exe
+C:\Users\8\Desktop\ServerAppLesson\ServerAppLesson\obj\Debug\ServerAppLesson.pdb

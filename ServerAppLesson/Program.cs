@@ -7,74 +7,114 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerAppLesson {
-    class Program {
+namespace ServerAppLesson
+{
+    class Program
+    {
         private static int defaultPort = 3535;
-        private static int defaultConnectionCount = 3;
-        private static List<User> CurrentUsers { get; set; }
+        private static int defaultConnectionCount = 25;
+        private static List<User> RegisteredUsers { get; set; }
 
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), defaultPort);
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(endPoint);
-            CurrentUsers = new List<User>();
+            //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //socket.Bind(endPoint);
+            RegisteredUsers = new List<User>();
 
-            try {
-                socket.Listen(defaultConnectionCount);
+
+            TcpListener server = new TcpListener(endPoint);
+            server.Start();
+
+            try
+            {
+                //socket.Listen(defaultConnectionCount);
 
                 Console.WriteLine("Server is set and waits for connections");
 
-                while (true) {
-                    User sender = new User();
-                    sender.UserSocket = socket.Accept();
-                    Task.Factory.StartNew(() => ProcessData(sender));
+                while (true)
+                {
+                    Socket senderSocket = server.AcceptSocket();
+                    Task.Factory.StartNew(() => ProcessData(senderSocket));
                 }
-            } 
-            catch (SocketException ex) {
+            }
+            catch (SocketException ex)
+            {
                 Console.WriteLine(ex.Message);
-            } finally {
-                socket.Close();
+            }
+            finally
+            {
+                server.Stop();
             }
         }
 
 
-        public static void ProcessData(User sender) {
+        public static void ProcessData(Socket senderSocket)
+        {
 
-            UserMessage newMessage;
-            UserMessage newUserInfo = null;
-            byte[] data = new byte[1024];
+            do
+            {
+                byte[] buffer = new byte[1024];
+                int countBytesReceived = senderSocket.Receive(buffer);
+                byte[] actualDataReceived = new byte[countBytesReceived];
+                for (int i = 0; i < countBytesReceived; i++)
+                {
+                    actualDataReceived[i] = buffer[i];
+                }
+                var bytesAsString = Encoding.UTF8.GetString(actualDataReceived);
+                UserMessage senderMessage = JsonConvert.DeserializeObject<UserMessage>(bytesAsString);
 
-            do {
-                sender.UserSocket.Receive(data);
-                var bytesAsString = Encoding.UTF8.GetString(data);
-                newMessage = JsonConvert.DeserializeObject<UserMessage>(bytesAsString);
-                sender.Name = newMessage.Sender;
+                UserMessage newUserInfo = new UserMessage { Sender = "Server", SentDate = DateTime.Now, Text = senderMessage.Sender + " connected" };
+                var userConnectedInfo = JsonConvert.SerializeObject(newUserInfo);
+                byte[] userConnectedInfoInBytes = Encoding.Default.GetBytes(userConnectedInfo);
 
 
-                if (!CurrentUsers.Any(s => s == sender)) {
-                    newUserInfo = new UserMessage { Sender = "Server", SentDate = DateTime.Now, Text = sender.Name + " connected" };
-                    CurrentUsers.Add(sender);
+                User existingUser = RegisteredUsers.Where(u => u.Name == senderMessage.Sender).FirstOrDefault();
+                if (existingUser != null && (senderMessage.Text == "FirstMessage"))
+                {
+                    existingUser.Connected = false;
+                    existingUser.UserSocket = senderSocket;
+                    existingUser.Name = senderMessage.Sender;
                 }
 
-                foreach (var user in CurrentUsers) {
+                if (existingUser == null)
+                {
+                    existingUser = new User { Name = senderMessage.Sender, Connected = false };
+                    RegisteredUsers.Add(existingUser);
+                    existingUser.UserSocket = senderSocket;
+                }
 
-                    try {
 
-                        if (newUserInfo != null && user != CurrentUsers.Last()) {
-                            var userConnectedInfo = JsonConvert.SerializeObject(newUserInfo);
-                            user.UserSocket.Send(Encoding.Default.GetBytes(userConnectedInfo));
+                foreach (var userInApp in RegisteredUsers)
+                {
+
+                    try
+                    {
+
+                        //need to send only when (1: new user connected, 2: old user reconnected)
+                        if (!existingUser.Connected && existingUser.Name != userInApp.Name && userInApp.UserSocket.Connected)
+                        {
+                            userInApp.UserSocket.Send(userConnectedInfoInBytes);
+                            continue;
                         }
 
-                        if (user != CurrentUsers.Last()) {
-                            var userMessage = JsonConvert.SerializeObject(newMessage);
-                            user.UserSocket.Send(Encoding.Default.GetBytes(userMessage));
+                        if (existingUser.Name != userInApp.Name && userInApp.UserSocket.Connected)
+                        {
+                            userInApp.UserSocket.Send(actualDataReceived);
                         }
-                    } catch (Exception ex) {
-                        Console.WriteLine(ex.Message);
+
+                    }
+
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception from user: " + userInApp.Name + ex.Message);
                     }
                 }
+
+                existingUser.Connected = true;
+
             }
-            while (sender.UserSocket.Available > 0);
+            while (senderSocket.Available > 0);
 
 
         }

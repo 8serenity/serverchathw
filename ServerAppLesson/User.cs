@@ -11,5 +11,6 @@ namespace ServerAppLesson
     {
         public string Name { get; set; }
         public Socket UserSocket { get; set; }
+        public bool Connected { get; set; }
     }
 }
